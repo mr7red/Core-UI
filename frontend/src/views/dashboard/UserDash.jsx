@@ -132,9 +132,6 @@ export default function UserTable() {
                         onChange={(e) => setSearch(e.target.value)}
                         style={{ width: "300px" }}
                     />
-                    <CButton color="primary" onClick={() => navigate("/User-Add")}>
-                        + Add Users
-                    </CButton>
 
                     {(loginRole === "admin" || loginRole === "superadmin") && (
 

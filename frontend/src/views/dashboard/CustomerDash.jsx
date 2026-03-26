@@ -102,8 +102,13 @@ export default function CustomerTable() {
                 <CTableBody className="align-middle">
                     {data
                         .filter((item) =>
-                            item.name.toLowerCase().includes(search.toLowerCase()) ||
-                            item.city.toLowerCase().includes(search.toLowerCase())
+                            (item.name || "")
+                                .toLowerCase()
+                                .includes(search.toLowerCase()) ||
+
+                            (item.city || "")
+                                .toLowerCase()
+                                .includes(search.toLowerCase())
                         )
                         .map((item, index) => (
                             <CTableRow key={item._id}>

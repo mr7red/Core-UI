@@ -49,7 +49,7 @@ app.use("/category",require("./routes/category"));
 app.use("/product",require("./routes/product"));
 
 
-app.get("/",(res,req)=>{
+app.get("/",(req,res)=>{
    res.send("Hello World") 
 })
 
