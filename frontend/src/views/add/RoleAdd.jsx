@@ -59,7 +59,7 @@ export default function RoleAdd() {
 
         try {
             await axios.post(
-                "http://localhost:5000/role/add",
+                "http://localhost:5000/role/create-role",
                 {
                     name: selectedRole,
                     permissions

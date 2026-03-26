@@ -8,53 +8,6 @@ const User = require("../models/User");
 const Role = require("../models/Role")
 
 
-// module.exports = async function (req, res, next) {
-//   try {
-
-//     const token = req.header("Authorization")?.replace("Bearer ", "");
-
-//     if (!token) {
-//       return res.status(401).json({ message: "No token, authorization denied" });
-//     }
-
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-//     let user = null;
-
-//     // Admin check
-//     user = await Admin.findById(decoded.id);
-
-//     if (!user) {
-//       user = await SuperAdmin.findById(decoded.id).populate("role");
-//     }
-
-//     if (!user) {
-//       user = await Manager.findById(decoded.id).populate("role");
-//     }
-
-//     if (!user) {
-//       user = await Employee.findById(decoded.id).populate("role");
-//     }
-
-//     if (!user) {
-//       user = await User.findById(decoded.id).populate("role");
-//     }
-
-//     if (!user) {
-//       return res.status(401).json({ message: "User not found" });
-//     }
-
-//     req.user = user;
-
-//     next();
-
-//   } catch (err) {
-//     console.log("Auth error:", err.message);
-//     res.status(401).json({ message: "Token is not valid" });
-//   }
-// };
-
-
 module.exports = async function (req, res, next) {
   try {
     const token = req.header("Authorization")?.replace("Bearer ", "")
