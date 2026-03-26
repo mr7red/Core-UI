@@ -49,6 +49,10 @@ app.use("/category",require("./routes/category"));
 app.use("/product",require("./routes/product"));
 
 
+app.get("/",(res,req)=>{
+   res.send("Hello World") 
+})
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
