@@ -6,10 +6,11 @@ const SetPassword = () => {
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
 const role = localStorage.getItem("role")
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/set-password", {
+      await axios.post(`${BASE_URL}/api/auth/set-password`, {
         email: localStorage.getItem("email"),
         password
       })

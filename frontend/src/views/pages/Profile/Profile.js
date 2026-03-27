@@ -18,6 +18,7 @@ import axios from "axios"
 import avatar8 from "../../../assets/images/avatars/8.png"
 
 export default function ProfilePage() {
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const token = localStorage.getItem("token")
 
@@ -35,7 +36,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
 
-        axios.get("http://localhost:5000/api/create/profile", {
+        axios.get(`${BASE_URL}/api/create/profile`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -57,7 +58,7 @@ export default function ProfilePage() {
         formData.append("profile", file)
 
         await axios.put(
-            "http://localhost:5000/api/create/profile/update",
+            `${BASE_URL}/api/create/profile/update`,
             formData,
             {
                 headers: {
@@ -78,7 +79,7 @@ export default function ProfilePage() {
         formData.append("banner", file)
 
         await axios.put(
-            "http://localhost:5000/api/create/profile/update",
+            `${BASE_URL}/api/create/profile/update`,
             formData,
             {
                 headers: {
@@ -96,7 +97,7 @@ export default function ProfilePage() {
         e.preventDefault()
 
         await axios.put(
-            "http://localhost:5000/api/create/profile/update",
+            `${BASE_URL}/api/create/profile/update`,
             { name, email },
             {
                 headers: {
@@ -144,7 +145,7 @@ export default function ProfilePage() {
                     width: "100%",
                     height: "250px",
                     backgroundImage: data.banner
-                        ? `url(http://localhost:5000/uploads/${data.banner})`
+                        ? `url(${BASE_URL}/uploads/${data.banner})`
                         : "none",
                     backgroundColor: "black",
                     backgroundSize: "cover",
@@ -197,7 +198,7 @@ export default function ProfilePage() {
                                             data.profile
                                                 ? data.profile.startsWith("http")
                                                     ? data.profile
-                                                    : `http://localhost:5000/uploads/${data.profile}`
+                                                    : `${BASE_URL}/uploads/${data.profile}`
                                                 : avatar8
                                         }
                                         alt="profile"

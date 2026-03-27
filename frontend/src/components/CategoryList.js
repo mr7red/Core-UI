@@ -4,12 +4,13 @@ import { CNavGroup, CNavItem } from "@coreui/react"
 import CIcon from "@coreui/icons-react"
 import { cilFilter } from "@coreui/icons"
 export default function CategorySidebar() {
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
 
-        axios.get("http://localhost:5000/category/list")
+        axios.get(`${BASE_URL}/category/list`)
             .then(res => {
                 setCategories(res.data)
             })

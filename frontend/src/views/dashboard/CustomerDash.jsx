@@ -124,7 +124,7 @@ export default function CustomerTable() {
                                             item.profile
                                                 ? item.profile.startsWith("http")
                                                     ? item.profile
-                                                    : `http://localhost:5000/uploads/${item.profile}`
+                                                    : `${BASE_URL}/uploads/${item.profile}`
                                                 : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                                         }
                                     />

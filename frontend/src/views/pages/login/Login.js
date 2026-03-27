@@ -192,7 +192,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                         onSuccess={async (res) => {
                           try {
                             const result = await axios.post(
-                              "http://localhost:5000/api/auth/google",
+                              `${BASE_URL}/api/auth/google`,
                               { token: res.credential }
                             )
 
@@ -223,7 +223,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                         onSuccess={async (response) => {
                           try {
                             const res = await axios.post(
-                              "http://localhost:5000/api/auth/facebook",
+                              `${BASE_URL}/api/auth/facebook`,
                               { accessToken: response.accessToken }
                             )
 
@@ -245,7 +245,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                       <CButton
                         color="dark"
                         onClick={() => {
-                          window.location.href = "http://localhost:5000/api/auth/github";
+                          window.location.href = `${BASE_URL}/api/auth/github`;
                         }}
                       >
                         Sign in with GitHub

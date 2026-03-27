@@ -39,6 +39,7 @@ const AppHeaderDropdown = () => {
     banner: ""
   })
   const navigate = useNavigate()
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const logout = () => {
     localStorage.clear()
@@ -47,7 +48,7 @@ const AppHeaderDropdown = () => {
 
   useEffect(() => {
 
-    axios.get("http://localhost:5000/api/create/profile", {
+    axios.get(`${BASE_URL}/api/create/profile`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -68,7 +69,7 @@ const AppHeaderDropdown = () => {
             data.profile
               ? data.profile.startsWith("http")
                 ? data.profile
-                : `http://localhost:5000/uploads/${data.profile}`
+                : `${BASE_URL}/uploads/${data.profile}`
               : avatar8
           }
           size="md"

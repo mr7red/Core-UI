@@ -53,8 +53,8 @@ export default function RoleEdit() {
     const handleSubmit = async () => {
         try {
             await axios.put(
-                `http://localhost:5000/role/update/${id}`,
-                // `${BASE_URL}/role/update/${id}`,
+                // `http://localhost:5000/role/update/${id}`,
+                `${BASE_URL}/role/update/${id}`,
                 form,
                 { headers: { Authorization: `Bearer ${token}` } }
             )

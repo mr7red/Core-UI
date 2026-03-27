@@ -90,8 +90,8 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
             if (product.image) {
                 setPreview(
-                    `http://localhost:5000/uploads/${product.image}`)
-                    // `${BASE_URL}/uploads/${product.image}`)
+                    // `http://localhost:5000/uploads/${product.image}`)
+                    `${BASE_URL}/uploads/${product.image}`)
             }
 
         } catch (err) {
