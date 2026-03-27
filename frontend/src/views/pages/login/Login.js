@@ -22,6 +22,7 @@ import CIcon from "@coreui/icons-react"
 import { cilLockLocked, cilUser } from "@coreui/icons"
 
 const Login = () => {
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -33,7 +34,8 @@ const Login = () => {
     try {
 
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        // "http://localhost:5000/api/auth/login",
+        `${BASE_URL}/api/auth/login`,
         { email, password }
       )
 

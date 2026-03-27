@@ -20,13 +20,16 @@ export default function BlogList() {
 
     const [blogs, setBlogs] = useState([])
     const [search, setSearch] = useState("")
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         fetchBlog()
     }, [])
 
     const fetchBlog = async () => {
-        const res = await axios.get("http://localhost:5000/blog/list")
+        const res = await axios.get(
+            // `http://localhost:5000/blog/list`)
+            `${BASE_URL}/blog/list`)
         setBlogs(res.data)
     }
 
@@ -43,7 +46,10 @@ export default function BlogList() {
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure delete?")) return;
 
-        await axios.delete(`http://localhost:5000/blog/delete/${id}`, {
+        await axios.delete(
+            // `http://localhost:5000/blog/delete/${id}`
+            `${BASE_URL}/blog/delete/${id}`
+            , {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -97,7 +103,7 @@ export default function BlogList() {
 
                                 <CTableDataCell>
                                     <CImage
-                                        src={`http://localhost:5000/uploads/${item.image}`}
+                                        src={`${BASE_URL}/uploads/${item.image}`}
                                         width={80}
                                     />
                                 </CTableDataCell>

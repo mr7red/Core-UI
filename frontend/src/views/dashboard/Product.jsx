@@ -15,17 +15,23 @@ import {
 } from "@coreui/react"
 
 export default function ProductList() {
+    const token = localStorage.getItem("token")
 
   const [products, setProducts] = useState([])
   const [search, setSearch] = useState("")
   const navigate = useNavigate()
-
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL
   useEffect(() => {
     fetchProducts()
   }, [])
 
   const fetchProducts = async () => {
-    const res = await axios.get("http://localhost:5000/product/list")
+    const res = await axios.get(
+      // "http://localhost:5000/product/list"
+      `${BASE_URL}/product/list`,
+      { headers: { Authorization: `Bearer ${token}` } }
+
+    )
     setProducts(res.data)
   }
 
@@ -35,7 +41,8 @@ export default function ProductList() {
     const token = localStorage.getItem("token")
 
     await axios.delete(
-      `http://localhost:5000/product/delete/${id}`,
+      // `http://localhost:5000/product/delete/${id}`,
+      `${BASE_URL}/product/delete/${id}`,
       { headers: { Authorization: `Bearer ${token}` } }
     )
 
@@ -77,7 +84,7 @@ export default function ProductList() {
             <CTableHeaderCell className="bg-body-tertiary text-center">Image</CTableHeaderCell>
             <CTableHeaderCell className="bg-body-tertiary text-center">Name</CTableHeaderCell>
             <CTableHeaderCell className="bg-body-tertiary text-center">Title</CTableHeaderCell>
-            <CTableHeaderCell className="bg-body-tertiary text-center" style={{width:"300px"}}>Description</CTableHeaderCell>
+            <CTableHeaderCell className="bg-body-tertiary text-center" style={{ width: "300px" }}>Description</CTableHeaderCell>
             <CTableHeaderCell className="bg-body-tertiary text-center">Price</CTableHeaderCell>
             <CTableHeaderCell className="bg-body-tertiary text-center">Status</CTableHeaderCell>
             <CTableHeaderCell className="bg-body-tertiary text-center">Category</CTableHeaderCell>
@@ -97,7 +104,7 @@ export default function ProductList() {
                 <img
                   src={`http://localhost:5000/uploads/${item.image}`}
                   width="60" height="50px"
-                  style={{ borderRadius: "5px",objectFit:"cover" }}
+                  style={{ borderRadius: "5px", objectFit: "cover" }}
                 />
               </CTableDataCell>
 
@@ -108,14 +115,14 @@ export default function ProductList() {
               {/* 🔥 2 LINE DESCRIPTION */}
               <CTableDataCell style={{
                 maxWidth: "300px",
-                height:"80px",
-                fontSize:"13px",
+                height: "80px",
+                fontSize: "13px",
                 overflow: "hidden",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical"
               }}>
-                <span style={{height:"20px",overflow:"hidden"}}>{item.description}</span>
+                <span style={{ height: "20px", overflow: "hidden" }}>{item.description}</span>
               </CTableDataCell>
 
               <CTableDataCell>₹{item.price}</CTableDataCell>
@@ -136,7 +143,7 @@ export default function ProductList() {
                 <CButton
                   size="sm"
                   color="primary"
-                 onClick={() => navigate(`/Product-Edit?id=${item._id}`)}
+                  onClick={() => navigate(`/Product-Edit?id=${item._id}`)}
                   style={{ marginRight: "5px" }}
                 >
                   <i className="fa-regular fa-pen-to-square"></i>

@@ -23,6 +23,7 @@ export default function RoleAdd() {
     const [permissions, setPermissions] = useState({})
 
     const allRoles = ["Superadmin", "Manager", "Employee", "User"]
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         fetchRoles()
@@ -30,7 +31,9 @@ export default function RoleAdd() {
 
     const fetchRoles = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/role/roles", {
+            const res = await axios.get(
+                // "http://localhost:5000/role/roles", {
+                `${BASE_URL}/role/roles`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setRoles(res.data)
@@ -59,7 +62,7 @@ export default function RoleAdd() {
 
         try {
             await axios.post(
-                "http://localhost:5000/role/create-role",
+                `${BASE_URL}/role/create-role`,
                 {
                     name: selectedRole,
                     permissions

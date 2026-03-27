@@ -13,6 +13,7 @@ export default function BlogEdit() {
   const { id } = useParams()
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const [form, setForm] = useState({
     title: "",
@@ -28,7 +29,10 @@ export default function BlogEdit() {
   }, [])
 
   const fetchSingleBlog = async () => {
-    const res = await axios.get("http://localhost:5000/blog/list")
+    const res = await axios.get(
+      // "http://localhost:5000/blog/list"
+      `${BASE_URL}/blog/list`
+    )
 
     const blog = res.data.find(b => b._id === id)
 
@@ -60,7 +64,8 @@ export default function BlogEdit() {
     }
 
     await axios.put(
-      `http://localhost:5000/blog/update/${id}`,
+      // `http://localhost:5000/blog/update/${id}`,
+      `${BASE_URL}/blog/update/${id}`,
       formData,
       {
         headers: { Authorization: `Bearer ${token}` }

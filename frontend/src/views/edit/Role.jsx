@@ -12,6 +12,7 @@ export default function RoleEdit() {
     const { id } = useParams()
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const [form, setForm] = useState({
         name: "",
@@ -24,7 +25,10 @@ export default function RoleEdit() {
 
     const fetchRole = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/role/roles", {
+            const res = await axios.get(
+                // "http://localhost:5000/role/roles",
+                `${BASE_URL}/role/roles`,
+                 {
                 headers: { Authorization: `Bearer ${token}` }
             })
 
@@ -50,6 +54,7 @@ export default function RoleEdit() {
         try {
             await axios.put(
                 `http://localhost:5000/role/update/${id}`,
+                // `${BASE_URL}/role/update/${id}`,
                 form,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -115,7 +120,7 @@ export default function RoleEdit() {
 
             </CTable>
 
-            <div style={{display:"flex",gap:"10px"}}>
+            <div style={{ display: "flex", gap: "10px" }}>
                 <CButton color="primary"
                     onClick={handleSubmit}>
                     Update

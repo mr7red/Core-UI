@@ -18,6 +18,7 @@ export default function CategoryEdit() {
 
     const { id } = useParams()
     const navigate = useNavigate()
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const [name, setName] = useState("")
     const [categories, setCategories] = useState([])
@@ -31,7 +32,10 @@ export default function CategoryEdit() {
     // 🔥 All categories (dropdown ku)
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/category/list")
+            const res = await axios.get(
+                // "http://localhost:5000/category/list"
+                `${BASE_URL}/category/list`
+            )
             setCategories(res.data)
         } catch (err) {
             console.log(err)
@@ -41,7 +45,9 @@ export default function CategoryEdit() {
     // 🔥 Current category data (edit fill)
     const fetchSingleCategory = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/category/list")
+            const res = await axios.get(
+                // "http://localhost:5000/category/list")
+                `${BASE_URL}/category/list`)
 
             const current = res.data.find(c => c._id === id)
 
@@ -66,7 +72,10 @@ export default function CategoryEdit() {
         }
 
         try {
-            await axios.put(`http://localhost:5000/category/edit/${id}`, payload)
+            await axios.put(
+                // `http://localhost:5000/category/edit/${id}`,
+                `${BASE_URL}/category/edit/${id}`,
+                payload)
 
             alert("Updated Successfully")
             navigate("/Category")
@@ -118,7 +127,7 @@ export default function CategoryEdit() {
                             }
                         </CDropdownToggle>
 
-                        <CDropdownMenu style={{ maxHeight: "300px", overflowY: "auto",width:"100%" }}>
+                        <CDropdownMenu style={{ maxHeight: "300px", overflowY: "auto", width: "100%" }}>
                             <CDropdownItem onClick={() => setParentCategory("MAIN")}>
                                 Main Category
                             </CDropdownItem>

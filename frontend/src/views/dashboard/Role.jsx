@@ -13,15 +13,18 @@ export default function RoleList() {
     const [roles, setRoles] = useState([])
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
-
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
     useEffect(() => {
         fetchRoles()
     }, [])
 
     const fetchRoles = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/role/roles", {
-                headers: { Authorization: `Bearer ${token}` }
+            const res = await axios.get(
+                // "http://localhost:5000/role/roles",
+                `${BASE_URL}/role/roles`,
+                
+                { headers: { Authorization: `Bearer ${token}` }
             })
             setRoles(res.data)
         } catch (err) {
@@ -33,8 +36,11 @@ export default function RoleList() {
         if (!window.confirm("Delete role?")) return
 
         try {
-            await axios.delete(`http://localhost:5000/role/delete/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
+            await axios.delete(
+                // `http://localhost:5000/role/delete/${id}`,
+                `${BASE_URL}/role/delete/${id}`,
+                 
+                {headers: { Authorization: `Bearer ${token}` }
             })
 
             setRoles(roles.filter(r => r._id !== id))

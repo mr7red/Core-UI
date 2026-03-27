@@ -12,6 +12,7 @@ export default function BlogAdd() {
 
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const [form, setForm] = useState({
         title: "",
@@ -39,7 +40,10 @@ export default function BlogAdd() {
             formData.append("image", image)
         }
 
-        await axios.post("http://localhost:5000/blog/add", formData, {
+        await axios.post(
+            // "http://localhost:5000/blog/add"
+            `${BASE_URL}/blog/add`
+            , formData, {
             headers: { Authorization: `Bearer ${token}` }
         })
 
@@ -69,7 +73,7 @@ export default function BlogAdd() {
 
                     <CFormInput type="file" className="mt-3" onChange={(e) => setImage(e.target.files[0])} />
 
-                    <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "Start",marginTop:"15px" }}>
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "Start", marginTop: "15px" }}>
 
                         <CButton color="primary" type="submit">
                             Add Blog

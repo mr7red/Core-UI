@@ -49,12 +49,4 @@ app.use("/category",require("./routes/category"));
 app.use("/product",require("./routes/product"));
 
 
-app.get("/",(req,res)=>{
-   res.send("Hello World") 
-})
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
-});
+app.listen(5000, () => console.log("Server running on 5000"));

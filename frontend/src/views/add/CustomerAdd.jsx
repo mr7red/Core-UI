@@ -18,6 +18,7 @@ export default function CustomerAdd() {
 
     const token = localStorage.getItem("token")
     const navigate = useNavigate()
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -27,7 +28,8 @@ export default function CustomerAdd() {
         try {
 
             await axios.post(
-                "http://localhost:5000/api/create/list/user",
+                // "http://localhost:5000/api/create/list/user",
+                `${BASE_URL}/api/create/list/user`,
                 form,
                 { headers: { Authorization: `Bearer ${token}` } }
             )

@@ -229,63 +229,40 @@ router.put("/profile/update", auth, upload.fields([
 
   });
 
-router.put("/edit/:role/:id", auth, permission("user_edit"), async (req, res) => {
-
-  const { role, id } = req.params;
-  const { role: newRole } = req.body;
-
+router.put("/edit/:role/:id", async (req, res) => {
   try {
 
-    let Model;
-    let NewModel;
+    const { role, id } = req.params;
 
     const models = {
+      admin: Admin,
       superadmin: SuperAdmin,
       manager: Manager,
       employee: Employee,
-      user: User
+      user: User,
     };
 
-    Model = models[role];
-    NewModel = models[newRole];
+    const Model = models[role];
 
-    if (!Model || !NewModel) {
-      return res.status(400).json({ message: "Invalid Role" });
+    if (!Model) {
+      return res.status(400).json({ message: "Invalid role" });
     }
 
-    const existing = await Model.findById(id);
+    // ❌ REMOVE ROLE FIELD
+    delete req.body.role;
 
-    if (!existing) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const updatedUser = await Model.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
 
-    if (role !== newRole) {
-
-      const newUser = await NewModel.create({
-        name: req.body.name,
-        email: req.body.email
-      });
-
-      await Model.findByIdAndDelete(id);
-
-      return res.json({
-        message: "Role updated and moved",
-        data: newUser
-      });
-
-    }
-
-    const updated = await Model.findByIdAndUpdate(id, req.body, { new: true });
-
-    res.json({
-      message: "Updated successfully",
-      data: updated
-    });
+    res.json(updatedUser);
 
   } catch (err) {
+    console.error("EDIT ERROR:", err);
     res.status(500).json({ message: err.message });
   }
-
 });
 
 router.delete("/delete/:role/:id", auth, acl("superAdmin", "admin"),
@@ -328,7 +305,7 @@ router.delete("/delete/:role/:id", auth, acl("superAdmin", "admin"),
   }
 );
 
-router.get("/list/:role",auth, permission("user_view"), async (req, res) => {
+router.get("/list/:role", auth, permission("user_view"), async (req, res) => {
 
   const { role } = req.params;
 
@@ -355,6 +332,40 @@ router.get("/list/:role",auth, permission("user_view"), async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+
+});
+
+
+router.get("/edit/:role/:id", auth, permission("user_view"), async (req, res) => {
+
+  const { role, id } = req.params;
+
+  try {
+
+    const models = {
+      superadmin: SuperAdmin,
+      manager: Manager,
+      employee: Employee,
+      user: User
+    };
+
+    const Model = models[role];
+
+    if (!Model) {
+      return res.status(400).json({ message: "Invalid Role" });
+    }
+
+    const user = await Model.findById(id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 
 });

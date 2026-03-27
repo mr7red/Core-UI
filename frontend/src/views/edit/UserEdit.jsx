@@ -8,6 +8,7 @@ import {
 } from "@coreui/react"
 
 export default function UserEdit() {
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const navigate = useNavigate()
     const { id } = useParams()
@@ -30,14 +31,17 @@ export default function UserEdit() {
     })
 
     useEffect(() => {
-        fetchUser()
-    }, [])
+        if (role && id) {
+            fetchUser()
+        }
+    }, [role, id])
 
     const fetchUser = async () => {
         try {
 
             const res = await axios.get(
-                `http://localhost:5000/api/create/get/${role}/${id}`,
+                // `http://localhost:5000/api/create/get/${role}/${id}`,
+                `${BASE_URL}/api/create/edit/${role}/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -80,25 +84,26 @@ export default function UserEdit() {
 
             let payload = {
                 name: form.name,
-                email: form.email
+                email: form.email,
             }
 
-            if (role === "manager") {
+            if (form.role === "manager") {
                 payload.department = form.department
                 payload.managerId = form.managerId
             }
 
-            if (role === "employee") {
+            if (form.role === "employee") {
                 payload.employeeId = form.employeeId
                 payload.employeeRole = form.employeeRole
             }
 
-            if (role === "user") {
+            if (form.role === "user") {
                 payload.city = form.city
             }
 
             await axios.put(
-                `http://localhost:5000/api/create/edit/${role}/${id}`,
+                // `http://localhost:5000/api/create/edit/${role}/${id}`,
+                `${BASE_URL}/api/create/edit/${role}/${id}`,
                 payload,
                 { headers: { Authorization: `Bearer ${token}` } }
             )

@@ -25,6 +25,7 @@ export default function UserTable() {
 
     const [users, setUsers] = useState([])
     const [search, setSearch] = useState("")
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         fetchUsers()
@@ -34,17 +35,21 @@ export default function UserTable() {
 
         try {
             const superAdminRes = await axios.get(
-                "http://localhost:5000/api/create/list/superadmin",
+                // "http://localhost:5000/api/create/list/superadmin",
+                `${BASE_URL}/api/create/list/superadmin`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
             const managerRes = await axios.get(
-                "http://localhost:5000/api/create/list/manager",
+                // "http://localhost:5000/api/create/list/manager"
+                `${BASE_URL}/api/create/list/manager`
+                ,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
             const employeeRes = await axios.get(
-                "http://localhost:5000/api/create/list/employee",
+                // "http://localhost:5000/api/create/list/employee",
+                `${BASE_URL}/api/create/list/employee`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -99,7 +104,8 @@ export default function UserTable() {
         try {
 
             await axios.delete(
-                `http://localhost:5000/api/create/delete/${role}/${id}`,
+                // `http://localhost:5000/api/create/delete/${role}/${id}`,
+                `${BASE_URL}/api/create/delete/${role}/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -190,7 +196,7 @@ export default function UserTable() {
                                     color="danger"
                                     onClick={() => handleDelete(user._id, user.role)}
                                 >
-                                    <i class="fa-regular fa-trash-can" style={{ color: "white" }}></i>
+                                    <i className="fa-regular fa-trash-can" style={{ color: "white" }}></i>
                                 </CButton>
 
                             </CTableDataCell>

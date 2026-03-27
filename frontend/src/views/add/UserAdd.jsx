@@ -11,7 +11,7 @@ export default function UserAdd() {
 
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
-
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
     const emptyForm = {
         name: "",
         email: "",
@@ -66,7 +66,7 @@ export default function UserAdd() {
             }
 
             await axios.post(
-                `http://localhost:5000/api/create/list/${form.role}`,
+                `${BASE_URL}/api/create/list/${form.role}`,
                 payload,
                 { headers: { Authorization: `Bearer ${token}` } }
             )

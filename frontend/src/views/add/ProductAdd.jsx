@@ -16,6 +16,7 @@ import {
 } from "@coreui/react"
 
 export default function ProductAdd() {
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
@@ -40,7 +41,9 @@ export default function ProductAdd() {
 
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/category/list")
+            const res = await axios.get(
+                // "http://localhost:5000/category/list")
+                `${BASE_URL}/category/list`)
             setCategories(res.data)
         } catch (err) {
             console.log(err)
@@ -82,7 +85,8 @@ export default function ProductAdd() {
 
         try {
             await axios.post(
-                "http://localhost:5000/product/add",
+                // "http://localhost:5000/product/add",
+                `${BASE_URL}/product/add`,
                 formData,
                 {
                     headers: {
@@ -204,18 +208,18 @@ export default function ProductAdd() {
                             />
                         </CCol>
 
-                        <CCol md={2}  style={{display:"flex",alignItems:"center",justifyContent:"center" }}>
+                        <CCol md={2} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                             {preview && (
-                                <div style={{ display:"flex",alignItems:"center",justifyContent:"center" }}>
-                                    <CImage src={preview} width={100} height={90} style={{objectFit:"cover"}} rounded />
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <CImage src={preview} width={100} height={90} style={{ objectFit: "cover" }} rounded />
                                 </div>
                             )}
                         </CCol>
 
 
-                        <CCol md={12} style={{display:"flex",alignItems:"center",justifyContent:"Start",marginTop:"15px" }}>
+                        <CCol md={12} style={{ display: "flex", alignItems: "center", justifyContent: "Start", marginTop: "15px" }}>
 
-                            <div style={{ display: "flex", gap: "10px",alignItems:"center",justifyContent:"center" }}>
+                            <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "center" }}>
 
                                 <CButton type="submit" color="primary">
                                     Add Product

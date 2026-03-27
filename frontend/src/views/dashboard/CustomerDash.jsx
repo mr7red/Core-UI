@@ -16,6 +16,7 @@ export default function CustomerTable() {
     const [data, setData] = useState([])
     const token = localStorage.getItem("token")
     const navigate = useNavigate()
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         fetchData()
@@ -23,7 +24,9 @@ export default function CustomerTable() {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/api/create/user", {
+            const res = await axios.get(
+                // "http://localhost:5000/api/create/user", {
+                `${BASE_URL}/api/create/user`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
 
@@ -42,7 +45,8 @@ export default function CustomerTable() {
         try {
 
             await axios.delete(
-                `http://localhost:5000/api/create/delete/user/${id}`,
+                // `http://localhost:5000/api/create/delete/user/${id}`,
+                `${BASE_URL}/api/create/delete/user/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -148,7 +152,7 @@ export default function CustomerTable() {
                                         onClick={() => handleDelete(item._id)}
                                         style={{ marginLeft: "5px" }}
                                     >
-                                        <i class="fa-regular fa-trash-can" style={{ color: "white" }}></i>
+                                        <i className="fa-regular fa-trash-can" style={{ color: "white" }}></i>
                                     </CButton>
                                 </CTableDataCell>
                             </CTableRow>

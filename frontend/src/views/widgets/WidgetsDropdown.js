@@ -26,6 +26,8 @@ const WidgetsDropdown = (props) => {
   const [productCount, setProductCount] = useState(0)
   const [inActiveProducts, setInActiveProducts] = useState(0)
   const [inactivePercent, setInactivePercent] = useState(0)
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL
+  const token = localStorage.getItem("token")
 
   useEffect(() => {
     document.documentElement.addEventListener('ColorSchemeChange', () => {
@@ -58,7 +60,9 @@ const WidgetsDropdown = (props) => {
 
     const fetchUsers = async () => {
 
-      const res = await axios.get("http://localhost:5000/api/create/count/users")
+      const res = await axios.get(
+        // "http://localhost:5000/api/create/count/users")
+        `${BASE_URL}/api/create/count/users`)
 
       setUsersCount(res.data.total)
 
@@ -67,7 +71,9 @@ const WidgetsDropdown = (props) => {
 
     const fetchCustomers = async () => {
 
-      const res = await axios.get("http://localhost:5000/api/create/count/customer")
+      const res = await axios.get(
+        // "http://localhost:5000/api/create/count/customer")
+        `${BASE_URL}/api/create/count/customer`)
 
       setCustomersCount(res.data.customers)
     }
@@ -75,7 +81,8 @@ const WidgetsDropdown = (props) => {
 
     const fetchProducts = async () => {
 
-      const res = await axios.get("http://localhost:5000/product/count")
+      const res = await axios.get(
+        `${BASE_URL}/product/count`)
 
       setProductCount(res.data.products)
     }
@@ -83,7 +90,12 @@ const WidgetsDropdown = (props) => {
 
     const fetchInActiveProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/product/list")
+        const res = await axios.get(
+          // "http://localhost:5000/product/list")
+          `${BASE_URL}/product/list`
+          , {
+            headers: { Authorization: `Bearer ${token}` }
+          });
 
         const inactive = res.data.filter(p => p.status === "Inactive")
 
@@ -372,7 +384,7 @@ const WidgetsDropdown = (props) => {
             <>
               {inActiveProducts}{' '}
               <span className="fs-6 fw-normal">
-                ({inactivePercent}% <CIcon icon={cilArrowBottom} />)
+                {/* ({inactivePercent}% <CIcon icon={cilArrowBottom} />) */}
               </span>
             </>
           }

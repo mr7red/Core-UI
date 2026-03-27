@@ -19,6 +19,7 @@ export default function ProductEdit() {
 
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
+const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     // ✅ query param method (breadcrumb safe)
     const query = new URLSearchParams(useLocation().search)
@@ -53,7 +54,10 @@ export default function ProductEdit() {
     // 🔹 Categories
     const fetchCategories = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/category/list")
+            const res = await axios.get(
+                // "http://localhost:5000/category/list"
+                `${BASE_URL}/category/list`
+            )
             setCategories(res.data)
         } catch (err) {
             console.log(err)
@@ -63,7 +67,9 @@ export default function ProductEdit() {
     // 🔹 Product fetch
     const fetchProduct = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/product/list")
+            const res = await axios.get(
+                // "http://localhost:5000/product/list")
+                `${BASE_URL}/product/list`)
 
             const product = res.data.find(p => p._id === id)
 
@@ -83,7 +89,9 @@ export default function ProductEdit() {
             })
 
             if (product.image) {
-                setPreview(`http://localhost:5000/uploads/${product.image}`)
+                setPreview(
+                    `http://localhost:5000/uploads/${product.image}`)
+                    // `${BASE_URL}/uploads/${product.image}`)
             }
 
         } catch (err) {
@@ -122,7 +130,7 @@ export default function ProductEdit() {
 
         try {
             await axios.put(
-                `http://localhost:5000/product/edit/${id}`,
+                `${BASE_URL}/product/edit/${id}`,
                 formData,
                 {
                     headers: {

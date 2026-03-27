@@ -14,19 +14,25 @@ export default function Category() {
     const navigate = useNavigate()
 
     const [categories, setCategories] = useState([])
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         fetchCategories()
     }, [])
 
     const fetchCategories = async () => {
-        const res = await axios.get("http://localhost:5000/category/list")
+        const res = await axios.get(
+            // "http://localhost:5000/category/list")
+            `${BASE_URL}/category/list`)
         setCategories(res.data)
     }
 
     const handleDelete = async (id) => {
         if (!window.confirm("Delete?")) return
-        await axios.delete(`http://localhost:5000/category/delete/${id}`)
+        await axios.delete(
+            // `http://localhost:5000/category/delete/${id}`
+            `${BASE_URL}/category/delete/${id}`
+        )
         fetchCategories()
     }
 
