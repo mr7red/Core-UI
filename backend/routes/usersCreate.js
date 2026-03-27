@@ -120,7 +120,7 @@ router.get("/profile", auth, async (req, res) => {
     let user = null;
     let roleName = null;
 
-    // check each model
+    
     for (const key in models) {
 
       const Model = models[key];
@@ -248,7 +248,7 @@ router.put("/edit/:role/:id", async (req, res) => {
       return res.status(400).json({ message: "Invalid role" });
     }
 
-    // ❌ REMOVE ROLE FIELD
+    
     delete req.body.role;
 
     const updatedUser = await Model.findByIdAndUpdate(
