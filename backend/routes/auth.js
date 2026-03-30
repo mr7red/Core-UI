@@ -251,7 +251,8 @@ router.post("/facebook", async (req, res) => {
 
 router.post("/forgot-password", async (req, res) => {
   
-  console.log("EMAIL:", process.env.EMAIL_USER);
+  try{
+    console.log("EMAIL:", process.env.EMAIL_USER);
   console.log("PASS:", process.env.EMAIL_PASS);
   
   const { email } = req.body;
@@ -298,6 +299,10 @@ router.post("/forgot-password", async (req, res) => {
 });
 
   res.json({ msg: "OTP sent to email" });
+  }catch(err){
+    console.log("MAIL ERROR:", err);
+    res.status(500).json({ msg: err.message });
+  }
 });
 
 
