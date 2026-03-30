@@ -68,12 +68,7 @@ const AppHeaderDropdown = () => {
           src={data.profile?.url || avatar8}
           size="md"
           shape="rounded-circle"
-          style={{
-            backgroundColor:"white",
-            width: "40px",
-            height: "40px",
-            objectFit: "cover"
-          }}
+          className="profile-avatar"
         />
       </CDropdownToggle>
 
