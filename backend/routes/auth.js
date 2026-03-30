@@ -9,6 +9,7 @@ const SuperAdmin = require("../models/SuperAdmin")
 const auth = require("../middleware/auth");
 const acl = require("../middleware/acl");
 const nodemailer = require("nodemailer");
+// const sendMail = require("../utils/resendMail");
 const { OAuth2Client } = require("google-auth-library")
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 const FB = require('fb');
@@ -60,6 +61,15 @@ router.post("/register", async (req, res) => {
       html: `<h2 style="background-color: black;color:white;padding:25px 0px;text-align:center;">Welcome ${user.name}</h2>
     <p>Your registration was successful</p>`
     });
+
+  //   await sendMail(
+  //     user.email,
+  //     "Registration Successful",
+  //     `<h2 style="background:black;color:white;padding:25px;text-align:center;">
+  //   Welcome ${user.name}
+  // </h2>
+  // <p>Your registration was successful</p>`
+  //   );
 
     res.json({ msg: "Registered successfully" });
 
@@ -253,56 +263,90 @@ router.post("/facebook", async (req, res) => {
 
 
 router.post("/forgot-password", async (req, res) => {
-  
-  try{
-    console.log("EMAIL:", process.env.EMAIL_USER);
-  console.log("PASS:", process.env.EMAIL_PASS);
-  
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ msg: "User not found" });
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  user.resetOtp = otp;
-  user.resetOtpExpire = Date.now() + 10 * 60 * 1000; // 10 min
-  await user.save();
+  try {
+    //   console.log("EMAIL:", process.env.EMAIL_USER);
+    // console.log("PASS:", process.env.EMAIL_PASS);
 
-  await transporter.sendMail({
-  from: `"Reset Password" <${process.env.EMAIL_USER}>`,
-  to: email,
-  subject: "OTP for Password Reset",
-  html: `
-  <div style="font-family:Arial,sans-serif;text-align:center">
-    
-    <h2 style="background:#000;color:#fff;padding:20px">
-      Password Reset OTP
-    </h2>
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ msg: "User not found" });
 
-    <p>Your One Time Password is</p>
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetOtp = otp;
+    user.resetOtpExpire = Date.now() + 10 * 60 * 1000;
+    await user.save();
 
-    <div style="
-      display:inline-block;
-      background: #8131c3bb;
-      border:1px solid #8131c3;
-      color:white;
-      padding:15px 25px;
-      font-size:24px;
-      font-weight:bold;
-      border-radius:6px;
-      letter-spacing:4px;
-      margin:15px 0;
-    ">
-      ${otp}
-    </div>
+      await transporter.sendMail({
+      from: `"Reset Password" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "OTP for Password Reset",
+      html: `
+      <div style="font-family:Arial,sans-serif;text-align:center">
 
-    <p>This OTP is valid for <b>10 minutes</b></p>
+        <h2 style="background:#000;color:#fff;padding:20px">
+          Password Reset OTP
+        </h2>
 
-  </div>
-  `
-});
+        <p>Your One Time Password is</p>
 
-  res.json({ msg: "OTP sent to email" });
-  }catch(err){
+        <div style="
+          display:inline-block;
+          background: #8131c3bb;
+          border:1px solid #8131c3;
+          color:white;
+          padding:15px 25px;
+          font-size:24px;
+          font-weight:bold;
+          border-radius:6px;
+          letter-spacing:4px;
+          margin:15px 0;
+        ">
+          ${otp}
+        </div>
+
+        <p>This OTP is valid for <b>10 minutes</b></p>
+
+      </div>
+      `
+    });
+
+
+  //   await sendMail(
+  //     email,
+  //     "OTP for Password Reset",
+  //     `
+  // <div style="font-family:Arial;text-align:center">
+
+  //   <h2 style="background:#000;color:#fff;padding:20px">
+  //     Password Reset OTP
+  //   </h2>
+
+  //   <p>Your One Time Password is</p>
+
+  //   <div style="
+  //     display:inline-block;
+  //     background:#8131c3bb;
+  //     color:white;
+  //     padding:15px 25px;
+  //     font-size:24px;
+  //     font-weight:bold;
+  //     border-radius:6px;
+  //     letter-spacing:4px;
+  //     margin:15px 0;
+  //   ">
+  //     ${otp}
+  //   </div>
+
+  //   <p>This OTP is valid for <b>10 minutes</b></p>
+
+  // </div>
+  // `
+  //   );
+
+
+    res.json({ msg: "OTP sent to email" });
+  } catch (err) {
     console.log("MAIL ERROR:", err);
     res.status(500).json({ msg: err.message });
   }
