@@ -250,6 +250,10 @@ router.post("/facebook", async (req, res) => {
 
 
 router.post("/forgot-password", async (req, res) => {
+  
+  console.log("EMAIL:", process.env.EMAIL_USER);
+  console.log("PASS:", process.env.EMAIL_PASS);
+  
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) return res.status(404).json({ msg: "User not found" });
