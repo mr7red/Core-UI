@@ -19,9 +19,8 @@ export default function ProductEdit() {
 
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
-const BASE_URL = import.meta.env.VITE_BACKEND_URL
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
-    // ✅ query param method (breadcrumb safe)
     const query = new URLSearchParams(useLocation().search)
     const id = query.get("id")
 
@@ -39,7 +38,6 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
     const [image, setImage] = useState(null)
 
-    // 🔹 Fetch on load
     useEffect(() => {
         fetchCategories()
 
@@ -51,7 +49,6 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
         }
     }, [id])
 
-    // 🔹 Categories
     const fetchCategories = async () => {
         try {
             const res = await axios.get(
@@ -64,12 +61,13 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
         }
     }
 
-    // 🔹 Product fetch
     const fetchProduct = async () => {
         try {
             const res = await axios.get(
                 // "http://localhost:5000/product/list")
-                `${BASE_URL}/product/list`)
+                `${BASE_URL}/product/list`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
 
             const product = res.data.find(p => p._id === id)
 
@@ -88,10 +86,8 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                 status: product.status || "Active"
             })
 
-            if (product.image) {
-                setPreview(
-                    // `http://localhost:5000/uploads/${product.image}`)
-                    `${BASE_URL}/uploads/${product.image}`)
+            if (product.image?.url) {
+                setPreview(product.image.url)
             }
 
         } catch (err) {
@@ -99,12 +95,10 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
         }
     }
 
-    // 🔹 Input change
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    // 🔹 Image change
     const handleImage = (e) => {
         const file = e.target.files[0]
         setImage(file)
@@ -114,7 +108,6 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
         }
     }
 
-    // 🔹 Submit update
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -134,7 +127,8 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
                     }
                 }
             )

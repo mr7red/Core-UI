@@ -102,7 +102,7 @@ export default function ProductList() {
 
               <CTableDataCell>
                 <img
-                  src={`${BASE_URL}/uploads/${item.image}`}
+                  src={item.image?.url}
                   width="60" height="50px"
                   style={{ borderRadius: "5px", objectFit: "cover" }}
                 />

@@ -50,12 +50,10 @@ export default function ProductAdd() {
         }
     }
 
-    // 🔹 Handle input change
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    // 🔹 Handle image upload + preview
     const handleImage = (e) => {
         const file = e.target.files[0]
         setImage(file)
@@ -65,7 +63,6 @@ export default function ProductAdd() {
         }
     }
 
-    // 🔹 Submit
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -90,7 +87,8 @@ export default function ProductAdd() {
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
                     }
                 }
             )
