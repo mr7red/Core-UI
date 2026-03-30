@@ -119,7 +119,7 @@ export default function CustomerTable() {
                                 <CTableDataCell className="text-center">{index + 1}</CTableDataCell>
 
                                 <CTableDataCell className="text-center">
-                                    <CAvatar style={{ width: "40px", height: "40px" }}
+                                    <CAvatar className="customer-table"
                                         src={
                                             item.profile?.url ||
                                             "https://cdn-icons-png.flaticon.com/512/149/149071.png"
