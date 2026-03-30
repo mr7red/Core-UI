@@ -1,10 +1,11 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
-const admin = require("./models/Admin")
-
-require("dotenv").config();
+const admin = require("./models/Admin");
+const router = require("./routes/product");
 
 const app = express();
 
@@ -42,12 +43,15 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", require("./routes/auth"))
-app.use("/api/create",require("./routes/usersCreate"))
+app.use("/api/create", require("./routes/usersCreate"))
 app.use("/role", require("./routes/role"));
-app.use("/blog", require("./routes/blog")); 
-app.use("/category",require("./routes/category"));
-app.use("/product",require("./routes/product"));
+app.use("/blog", require("./routes/blog"));
+app.use("/category", require("./routes/category"));
+app.use("/product", require("./routes/product"));
 
+router.get("/", (req, res) => {
+    res.send("Server Running")
+})
 
 const PORT = process.env.PORT || 5000;
 

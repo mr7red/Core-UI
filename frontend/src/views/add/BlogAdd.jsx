@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import {
     CCard, CCardBody, CCardHeader,
     CFormInput, CFormTextarea,
-    CButton, CRow, CCol
+    CButton, CRow, CCol, CImage
 } from "@coreui/react"
 
 export default function BlogAdd() {
@@ -13,6 +13,7 @@ export default function BlogAdd() {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
     const BASE_URL = import.meta.env.VITE_BACKEND_URL
+    const [preview, setPreview] = useState(null)
 
     const [form, setForm] = useState({
         title: "",
@@ -25,6 +26,15 @@ export default function BlogAdd() {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
+    }
+
+    const handleImage = (e) => {
+        const file = e.target.files[0]
+        setImage(file)
+
+        if (file) {
+            setPreview(URL.createObjectURL(file))
+        }
     }
 
     const handleSubmit = async (e) => {
@@ -42,10 +52,14 @@ export default function BlogAdd() {
 
         await axios.post(
             // "http://localhost:5000/blog/add"
-            `${BASE_URL}/blog/add`
-            , formData, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+            `${BASE_URL}/blog/add`,
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                }
+            })
 
         alert("Blog Added")
         navigate("/blog-list")
@@ -71,7 +85,23 @@ export default function BlogAdd() {
                         </CCol>
                     </CRow>
 
-                    <CFormInput type="file" className="mt-3" onChange={(e) => setImage(e.target.files[0])} />
+
+                    <CRow className="align-middle">
+
+                        <CCol md={10}>
+
+                            <CFormInput type="file" className="mt-3" onChange={handleImage} />
+                        </CCol>
+
+                        <CCol md={2} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {preview && (
+                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <CImage src={preview} width={100} height={90} style={{ objectFit: "cover" }} rounded />
+                                </div>
+                            )}
+                        </CCol>
+
+                    </CRow>
 
                     <div style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "Start", marginTop: "15px" }}>
 

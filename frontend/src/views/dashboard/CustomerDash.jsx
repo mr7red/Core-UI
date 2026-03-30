@@ -121,11 +121,8 @@ export default function CustomerTable() {
                                 <CTableDataCell className="text-center">
                                     <CAvatar style={{ width: "40px", height: "40px" }}
                                         src={
-                                            item.profile
-                                                ? item.profile.startsWith("http")
-                                                    ? item.profile
-                                                    : `${BASE_URL}/uploads/${item.profile}`
-                                                : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                                            item.profile?.url ||
+                                            "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                                         }
                                     />
                                 </CTableDataCell>

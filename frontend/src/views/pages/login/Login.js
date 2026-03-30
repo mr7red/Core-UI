@@ -22,7 +22,7 @@ import CIcon from "@coreui/icons-react"
 import { cilLockLocked, cilUser } from "@coreui/icons"
 
 const Login = () => {
-const BASE_URL = import.meta.env.VITE_BACKEND_URL
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -40,6 +40,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
       )
 
       localStorage.setItem("token", res.data.token)
+      localStorage.setItem("hasPassword", "true")
       localStorage.setItem("role", res.data.role)
       localStorage.setItem("name", res.data.name)
       localStorage.setItem("id", res.data.id)
@@ -124,7 +125,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
                       <CCol xs={6} className="text-right">
 
-                        <CButton color="link" className="px-0">
+                        <CButton color="link" className="px-0" onClick={() => navigate("/forgot-password")}>
                           Forgot password?
                         </CButton>
 
@@ -178,8 +179,8 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                         alignContent: "center",
                         justifyContent: "center",
                         textAlign: "center",
-                     height:"20px",
-                     }}>
+                        height: "20px",
+                      }}>
 
 
                         <p style={{
@@ -197,6 +198,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
                             )
 
                             localStorage.setItem("token", result.data.token)
+                            localStorage.setItem("hasPassword", result.data.hasPassword)
                             localStorage.setItem("role", result.data.role)
                             localStorage.setItem("name", result.data.name)
                             localStorage.setItem("id", result.data.id)

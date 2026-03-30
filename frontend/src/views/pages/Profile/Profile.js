@@ -52,24 +52,27 @@ export default function ProfilePage() {
 
     const handleProfileUpload = async (e) => {
 
-        const file = e.target.files[0]
+    const file = e.target.files[0]
 
-        const formData = new FormData()
-        formData.append("profile", file)
+    const formData = new FormData()
 
-        await axios.put(
-            `${BASE_URL}/api/create/profile/update`,
-            formData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data"
-                }
+    formData.append("profile", file)
+    formData.append("name", name)
+    formData.append("email", email)
+
+    await axios.put(
+        `${BASE_URL}/api/create/profile/update`,
+        formData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data"
             }
-        )
+        }
+    )
 
-        window.location.reload()
-    }
+    window.location.reload()
+}
 
     const handleBannerUpload = async (e) => {
 
@@ -140,12 +143,12 @@ export default function ProfilePage() {
             <div
                 onClick={() => document.getElementById("bannerUpload").click()}
                 style={{
-                    borderRadius:"50px",
-                    marginTop:"2px",
+                    borderRadius: "50px",
+                    marginTop: "2px",
                     width: "100%",
                     height: "250px",
-                    backgroundImage: data.banner
-                        ? `url(${BASE_URL}/uploads/${data.banner})`
+                    backgroundImage: data.banner?.url
+                        ? `url(${data.banner.url})`
                         : "none",
                     backgroundColor: "black",
                     backgroundSize: "cover",
@@ -195,10 +198,8 @@ export default function ProfilePage() {
 
                                     <img
                                         src={
-                                            data.profile
-                                                ? data.profile.startsWith("http")
-                                                    ? data.profile
-                                                    : `${BASE_URL}/uploads/${data.profile}`
+                                            data.profile?.url
+                                                ? data.profile.url
                                                 : avatar8
                                         }
                                         alt="profile"

@@ -3,17 +3,27 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 
 import {
-  CCard, CCardBody, CCardHeader,
-  CFormInput, CFormTextarea,
-  CButton, CRow, CCol
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CFormInput,
+  CFormTextarea,
+  CButton,
+  CRow,
+  CCol,
+  CImage
 } from "@coreui/react"
 
 export default function BlogEdit() {
 
   const { id } = useParams()
   const navigate = useNavigate()
+
   const token = localStorage.getItem("token")
-const BASE_URL = import.meta.env.VITE_BACKEND_URL
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL
+
+  const [preview, setPreview] = useState(null)
+  const [image, setImage] = useState(null)
 
   const [form, setForm] = useState({
     title: "",
@@ -22,33 +32,56 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
     endDate: ""
   })
 
-  const [image, setImage] = useState(null)
 
   useEffect(() => {
     fetchSingleBlog()
   }, [])
 
   const fetchSingleBlog = async () => {
-    const res = await axios.get(
-      // "http://localhost:5000/blog/list"
-      `${BASE_URL}/blog/list`
-    )
+    try {
 
-    const blog = res.data.find(b => b._id === id)
+      const res = await axios.get(`${BASE_URL}/blog/list`)
 
-    if (blog) {
+      const blog = res.data.find(b => b._id === id)
+
+      if (!blog) {
+        alert("Blog not found")
+        navigate("/blog-list")
+        return
+      }
+
       setForm({
         title: blog.title || "",
         content: blog.content || "",
         startDate: blog.startDate?.slice(0, 10) || "",
         endDate: blog.endDate?.slice(0, 10) || ""
       })
+
+      if (blog.image?.url) {
+        setPreview(blog.image.url)
+      }
+
+    } catch (err) {
+      console.log(err)
     }
   }
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
+
+
+  const handleImage = (e) => {
+
+    const file = e.target.files[0]
+    setImage(file)
+
+    if (file) {
+      setPreview(URL.createObjectURL(file))
+    }
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -63,21 +96,32 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
       formData.append("image", image)
     }
 
-    await axios.put(
-      // `http://localhost:5000/blog/update/${id}`,
-      `${BASE_URL}/blog/update/${id}`,
-      formData,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    )
+    try {
 
-    alert("Blog Updated")
-    navigate("/Blog")
+      await axios.put(
+        `${BASE_URL}/blog/update/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      )
+
+      alert("Blog Updated Successfully")
+
+      navigate("/Blog")
+
+    } catch (err) {
+      console.log(err)
+      alert("Update Failed")
+    }
   }
+
 
   return (
     <CCard>
+
       <CCardHeader>
         <h4>Edit Blog</h4>
       </CCardHeader>
@@ -124,13 +168,46 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
             </CCol>
           </CRow>
 
-          <CFormInput
-            type="file"
-            className="mt-3"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
 
-          <div style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+          <CRow className="align-middle mt-3">
+
+            <CCol md={10}>
+              <CFormInput
+                type="file"
+                label="Blog Image"
+                onChange={handleImage}
+              />
+            </CCol>
+
+            <CCol
+              md={2}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              {preview && (
+                <CImage
+                  src={preview}
+                  width={100}
+                  height={90}
+                  style={{ objectFit: "cover" }}
+                  rounded
+                />
+              )}
+            </CCol>
+
+          </CRow>
+
+
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              marginTop: "15px"
+            }}
+          >
 
             <CButton color="primary" type="submit">
               Update Blog
@@ -139,7 +216,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
             <CButton
               type="button"
               color="secondary"
-              onClick={() => navigate("/Blog")}
+              onClick={() => navigate("/blog-list")}
             >
               Cancel
             </CButton>
