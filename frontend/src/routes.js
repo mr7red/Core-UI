@@ -35,15 +35,16 @@ const CategoryEdit = React.lazy(() => import('./views/edit/CategoryEdit'))
 
 const ProductList = React.lazy(() => import('./views/dashboard/Product'))
 const ProductAdd = React.lazy(() => import('./views/add/ProductAdd'))
-const ProductEdit = React.lazy(()=> import('./views/edit/ProductEdit'))
+const ProductEdit = React.lazy(() => import('./views/edit/ProductEdit'))
 
-const Blog = React.lazy(()=> import('./views/dashboard/Blog'))
-const BlogAdd = React.lazy(()=> import('./views/add/BlogAdd'))
-const BlogEdit = React.lazy(()=> import('./views/edit/BlogEdit'))
+const Blog = React.lazy(() => import('./views/dashboard/Blog'))
+const BlogAdd = React.lazy(() => import('./views/add/BlogAdd'))
+const BlogEdit = React.lazy(() => import('./views/edit/BlogEdit'))
 
-const Rolelist = React.lazy(()=> import('./views/dashboard/Role'))
-const RoleAdd = React.lazy(()=> import('./views/add/RoleAdd'))
-const RoleEdit = React.lazy(()=> import('./views/edit/Role'))
+const Rolelist = React.lazy(() => import('./views/dashboard/Role'))
+const RoleAdd = React.lazy(() => import('./views/add/RoleAdd'))
+const RoleEdit = React.lazy(() => import('./views/edit/Role'))
+
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -114,27 +115,35 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/profile', name: 'Profile', element: Profile },
+
   { path: '/Role-list', name: 'Role Table', element: Rolelist },
   { path: '/Role-Add', name: 'Role Add', element: RoleAdd },
   { path: '/Role-Edit/:id', name: 'Role Edit', element: RoleEdit },
+
   { path: '/Customer-list', name: 'Customer Table', element: CustomerTable },
   { path: '/Customer-Add', name: 'Customer Add', element: CustomerAdd },
   { path: '/Customer-Edit/:id', name: 'Customer Edit', element: CustomerEdit },
+
   { path: '/User-list', name: 'User Table', element: UserTable },
   { path: '/User-Add', name: 'User Add', element: UserAdd },
   { path: '/User-Edit/:id', name: 'User Edit', element: UserEdit },
+
   { path: '/Category', name: 'Category', element: Category },
   { path: '/Category-Add', name: 'Category Add', element: CategoryAdd },
   { path: '/Category-Edit/:id', name: 'Category Edit', element: CategoryEdit },
+
   { path: '/Product-list', name: 'Products', element: ProductList },
   { path: '/Product-list/Product-add', name: 'Product Add', element: ProductAdd },
   { path: '/Product-Edit', name: 'Product Edit', element: ProductEdit },
+
   { path: '/Blog', name: 'Blog', element: Blog },
   { path: '/Blog-Add', name: 'Blog Add', element: BlogAdd },
   { path: '/Blog-Edit/:id', name: 'Blog Edit', element: BlogEdit },
+
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
+
   { path: '/base', name: 'Base', element: Cards, exact: true },
   { path: '/base/accordion', name: 'Accordion', element: Accordion },
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
@@ -151,11 +160,14 @@ const routes = [
   { path: '/base/tabs', name: 'Tabs', element: Tabs },
   { path: '/base/tables', name: 'Tables', element: Tables },
   { path: '/base/tooltips', name: 'Tooltips', element: Tooltips },
+
   { path: '/buttons', name: 'Buttons', element: Buttons, exact: true },
   { path: '/buttons/buttons', name: 'Buttons', element: Buttons },
   { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
   { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
+
   { path: '/charts', name: 'Charts', element: Charts },
+
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },
@@ -165,15 +177,18 @@ const routes = [
   { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels },
   { path: '/forms/layout', name: 'Layout', element: Layout },
   { path: '/forms/validation', name: 'Validation', element: Validation },
+
   { path: '/icons', exact: true, name: 'Icons', element: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons },
   { path: '/icons/flags', name: 'Flags', element: Flags },
   { path: '/icons/brands', name: 'Brands', element: Brands },
+
   { path: '/notifications', name: 'Notifications', element: Alerts, exact: true },
   { path: '/notifications/alerts', name: 'Alerts', element: Alerts },
   { path: '/notifications/badges', name: 'Badges', element: Badges },
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
+
   { path: '/widgets', name: 'Widgets', element: Widgets },
 ]
 

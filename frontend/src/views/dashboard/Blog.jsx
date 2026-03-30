@@ -28,7 +28,6 @@ export default function BlogList() {
 
     const fetchBlog = async () => {
         const res = await axios.get(
-            // `http://localhost:5000/blog/list`)
             `${BASE_URL}/blog/list`)
         setBlogs(res.data)
     }
@@ -50,15 +49,14 @@ export default function BlogList() {
             // `http://localhost:5000/blog/delete/${id}`
             `${BASE_URL}/blog/delete/${id}`
             , {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
         fetchBlog();
     };
 
     return (
         <>
-            {/* 🔝 TOP BAR */}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
 
                 <h4>Blog</h4>
@@ -103,9 +101,13 @@ export default function BlogList() {
 
                                 <CTableDataCell>
                                     <CImage
-                                        src={`${BASE_URL}/uploads/${item.image}`}
-                                        width={80}
-                                    />
+                                        src={item.image?.url}
+style={{
+    width:"80px",
+    height:"50px",
+    objectFit:"cover"
+}}
+/>
                                 </CTableDataCell>
 
                                 <CTableDataCell>{item.title}</CTableDataCell>
@@ -141,7 +143,7 @@ export default function BlogList() {
                                         className="ms-2"
                                         onClick={() => handleDelete(item._id)}
                                     >
-                                        <i class="fa-regular fa-trash-can" style={{ color: "white" }}></i>
+                                        <i className="fa-regular fa-trash-can" style={{ color: "white" }}></i>
                                     </CButton>
                                 </CTableDataCell>
 
