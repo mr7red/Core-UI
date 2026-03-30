@@ -249,6 +249,52 @@ router.post("/facebook", async (req, res) => {
 });
 
 
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ msg: "User not found" });
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  user.resetOtp = otp;
+  user.resetOtpExpire = Date.now() + 10 * 60 * 1000; // 10 min
+  await user.save();
+
+  await transporter.sendMail({
+    from: `"Reset Password" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "OTP for Password Reset",
+    html: `<h3>Your OTP is ${otp}</h3><p>Valid for 10 minutes</p>`
+  });
+
+  res.json({ msg: "OTP sent to email" });
+});
+
+
+router.post("/verify-otp", async (req, res) => {
+  const { email, otp } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ msg: "User not found" });
+  if (user.resetOtp !== otp || Date.now() > user.resetOtpExpire) {
+    return res.status(400).json({ msg: "OTP invalid or expired" });
+  }
+  res.json({ msg: "OTP verified" });
+});
+
+
+router.post("/reset-password", async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ msg: "User not found" });
+
+  const hashed = await bcrypt.hash(password, 10);
+  user.password = hashed;
+  user.resetOtp = undefined;
+  user.resetOtpExpire = undefined;
+  await user.save();
+
+  res.json({ msg: "Password reset successfully" });
+});
+
 router.get("/github", (req, res) => {
   const client_id = process.env.GITHUB_CLIENT_ID;
   const redirect_uri = "http://localhost:5000/api/auth/github/callback";

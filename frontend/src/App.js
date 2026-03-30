@@ -20,6 +20,10 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 const SetPassword = React.lazy(() => import('./views/pages/Password/password'))
 const GithubSuccess = React.lazy(() => import("./views/pages/login/GithubSuccess"))
 
+const ForgotPassword = React.lazy(() => import('./views/pages/Password/ForgotPassword'))
+const ResetPassword = React.lazy(() => import('./views/pages/Password/ResetPassword'))
+
+
 const App = () => {
 
   const { isColorModeSet, setColorMode } =
@@ -85,6 +89,24 @@ const App = () => {
               element={
                 <PublicRoute>
                   <SetPassword />
+                </PublicRoute>
+              }
+            />
+            
+            <Route
+              path="/forgot-password"
+              element={
+                <PublicRoute>
+                  <ForgotPassword />
+                </PublicRoute>
+              }
+            />
+
+            <Route
+              path="/Reset-password"
+              element={
+                <PublicRoute>
+                  <ResetPassword />
                 </PublicRoute>
               }
             />
