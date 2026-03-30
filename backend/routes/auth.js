@@ -260,11 +260,38 @@ router.post("/forgot-password", async (req, res) => {
   await user.save();
 
   await transporter.sendMail({
-    from: `"Reset Password" <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: "OTP for Password Reset",
-    html: `<h3>Your OTP is ${otp}</h3><p>Valid for 10 minutes</p>`
-  });
+  from: `"Reset Password" <${process.env.EMAIL_USER}>`,
+  to: email,
+  subject: "OTP for Password Reset",
+  html: `
+  <div style="font-family:Arial,sans-serif;text-align:center">
+    
+    <h2 style="background:#000;color:#fff;padding:20px">
+      Password Reset OTP
+    </h2>
+
+    <p>Your One Time Password is</p>
+
+    <div style="
+      display:inline-block;
+      background: #8131c3bb;
+      border:1px solid #8131c3;
+      color:white;
+      padding:15px 25px;
+      font-size:24px;
+      font-weight:bold;
+      border-radius:6px;
+      letter-spacing:4px;
+      margin:15px 0;
+    ">
+      ${otp}
+    </div>
+
+    <p>This OTP is valid for <b>10 minutes</b></p>
+
+  </div>
+  `
+});
 
   res.json({ msg: "OTP sent to email" });
 });
