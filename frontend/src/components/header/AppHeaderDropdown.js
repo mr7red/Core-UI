@@ -39,7 +39,7 @@ const AppHeaderDropdown = () => {
     banner: ""
   })
   const navigate = useNavigate()
-    const BASE_URL = import.meta.env.VITE_BACKEND_URL
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const logout = () => {
     localStorage.clear()
@@ -65,16 +65,15 @@ const AppHeaderDropdown = () => {
 
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
         <CAvatar
-          src={
-            data.profile
-              ? data.profile.startsWith("http")
-                ? data.profile
-                : `${BASE_URL}/uploads/${data.profile}`
-              : avatar8
-          }
+          src={data.profile?.url || avatar8}
           size="md"
           shape="rounded-circle"
-          style={{ width: "40px", height: "40px", backgroundColor: "#fff", objectFit: "cover" }}
+          style={{
+            backgroundColor:"white",
+            width: "40px",
+            height: "40px",
+            objectFit: "cover"
+          }}
         />
       </CDropdownToggle>
 

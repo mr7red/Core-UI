@@ -15,6 +15,9 @@ const auth = require("../middleware/auth");
 const acl = require("../middleware/acl");
 const permission = require("../middleware/permissionAcl");
 
+const cloudinary = require("../config/cloudinary");
+
+
 router.post("/list/:role", auth, permission("user_add"), async (req, res) => {
 
   const { role } = req.params;
@@ -120,7 +123,7 @@ router.get("/profile", auth, async (req, res) => {
     let user = null;
     let roleName = null;
 
-    
+
     for (const key in models) {
 
       const Model = models[key];
@@ -161,12 +164,14 @@ router.get("/profile", auth, async (req, res) => {
 
 });
 
-router.put("/profile/update", auth, upload.fields([
-  { name: "profile", maxCount: 1 },
-  { name: "banner", maxCount: 1 }
-]),
+router.put(
+  "/profile/update",
+  auth,
+  upload.fields([
+    { name: "profile", maxCount: 1 },
+    { name: "banner", maxCount: 1 },
+  ]),
   async (req, res) => {
-
     try {
 
       const { id } = req.user;
@@ -176,7 +181,7 @@ router.put("/profile/update", auth, upload.fields([
         superadmin: SuperAdmin,
         manager: Manager,
         employee: Employee,
-        user: User
+        user: User,
       };
 
       let updatedUser = null;
@@ -188,22 +193,66 @@ router.put("/profile/update", auth, upload.fields([
 
         if (user) {
 
-          const updateData = {};
+          let updateData = {};
 
-          if (req.body.name) {
-            updateData.name = req.body.name;
+          if (req.body.name) updateData.name = req.body.name;
+          if (req.body.email) updateData.email = req.body.email;
+
+          if (req.files?.profile?.length > 0) {
+
+            if (user.profile?.public_id) {
+              await cloudinary.uploader.destroy(user.profile.public_id);
+            }
+
+            const uploadToCloudinary = (file, folder) =>
+              new Promise((resolve, reject) => {
+                cloudinary.uploader
+                  .upload_stream(
+                    { folder },
+                    (error, result) => {
+                      if (error) reject(error)
+                      else resolve(result)
+                    }
+                  )
+                  .end(file.buffer)
+              })
+
+            const result = await uploadToCloudinary(
+              req.files.profile[0],
+              "profile"
+            )
+
+            updateData.profile = {
+              url: result.secure_url,
+              public_id: result.public_id,
+            };
           }
 
-          if (req.body.email) {
-            updateData.email = req.body.email;
-          }
+          if (req.files?.banner?.length > 0) {
 
-          if (req.files?.profile) {
-            updateData.profile = req.files.profile[0].filename;
-          }
+            if (user.banner?.public_id) {
+              await cloudinary.uploader.destroy(user.banner.public_id);
+            }
 
-          if (req.files?.banner) {
-            updateData.banner = req.files.banner[0].filename;
+            const uploadBanner = () =>
+              new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                  { folder: "banner" },
+                  (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                  }
+                );
+
+                stream.end(req.files.banner[0].buffer);
+              });
+
+            const result = await uploadBanner();
+
+            updateData.banner = {
+              url: result.secure_url,
+              public_id: result.public_id,
+            };
           }
 
           updatedUser = await Model.findByIdAndUpdate(
@@ -218,16 +267,15 @@ router.put("/profile/update", auth, upload.fields([
 
       res.json({
         message: "Profile Updated",
-        data: updatedUser
+        data: updatedUser,
       });
 
     } catch (err) {
-      res.status(500).json({
-        message: err.message
-      });
+      console.log(err);
+      res.status(500).json({ message: err.message });
     }
-
-  });
+  }
+);
 
 router.put("/edit/:role/:id", async (req, res) => {
   try {
@@ -248,7 +296,7 @@ router.put("/edit/:role/:id", async (req, res) => {
       return res.status(400).json({ message: "Invalid role" });
     }
 
-    
+
     delete req.body.role;
 
     const updatedUser = await Model.findByIdAndUpdate(
